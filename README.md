@@ -1,91 +1,142 @@
-# vue3-select2-component
+## What is this repo?
+This repo is to solve jQuery import errors at [godbasin/vue-select2](https://github.com/godbasin/vue-select2)
 
-Source code in: [https://github.com/godbasin/vue-select2/tree/npm-publish-code-for-vue3](https://github.com/godbasin/vue-select2/tree/npm-publish-code-for-vue3).
+Example:
+```
+Uncaught SyntaxError: The requested module '/node_modules/jquery/dist/jquery.js?v=12345' does not provide an export named 'default'
+```
 
-Demo code in: [https://github.com/godbasin/vue-select2/tree/demo-for-vue3-select-component](https://github.com/godbasin/vue-select2/tree/demo-for-vue3-select-component).
+```
+TypeError: Abc(...).find(...).select2 is not a function
+```
 
-## Related Versions
+```
+ReferenceError: $ is not defined
+```
 
-vue3-select2-component is baseed on these plugins and libs(version):
-- [vue(>= 3.0-beta)](https://github.com/vuejs/vue-next)
-- [jQuery](https://jquery.com/)
-- [select2](https://select2.github.io/)
+## What are the code changes?
+
+I removed all about jQuery and Select2 import, but you need to import jQuery and Select2 manually from CDN etc.
+
+## Requirements
+- Vite
+- Vue version: 3.x or later
+- jQuery version: any **(CDN)**
+- Select2 version: 4.x or later **(CDN)**
+
+If you install jQuery and Select2 using npm, it may not work well.
 
 ## How to use 
----
-### Install
-``` cmd
-// npm install
-npm install vue3-select2-component --save
+
+#### 1. Install
 ```
-
-### Use as component
-1. import as global component.
-``` javascript
-// import Select2Component
-import Select2 from 'vue3-select2-component';
-// Create a Vue application
-const app = Vue.createApp({})
-
-// Define a new global component called button-counter
-app.component('Select2', Select2)
+npm install xignp/vue3-select2-component
 ```
+I'm not publishing this package in npm, So npm will install this package from github.
 
-2. import into a single component.
-``` javascript
-// import Select2Component
-import Select2 from 'vue3-select2-component';
+#### 2. Import jQuery and Select2
+
+index.html or xxx.blade.php or etc..
+
+``` html
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"
+  rel="stylesheet"
+/>
+```
+[jQueryCDN](https://releases.jquery.com/)
+
+[Select2CDN](https://cdnjs.com/libraries/select2)
+
+#### 4. Use as Component
+
+Sample.vue
+``` vue
+<script setup>
+import Select2 from "vue3-select2-component";
+</script>
 
 <template>
   <div>
-    <Select2 v-model="myValue" :options="myOptions" :settings="{ settingOption: value, settingOption: value }" @change="myChangeEvent($event)" @select="mySelectEvent($event)" />
+    <Select2 />
+  </div>
+</template>
+
+<style scoped></style>
+```
+
+## Full Sample
+
+index.html
+``` html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <title>Vite + Vue</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
+```
+
+App.vue
+``` vue
+<script setup>
+import { ref } from "vue";
+import Select2 from "vue3-select2-component";
+
+const myValue = ref("Banana");
+const myOptions = ref(["Apple", "Banana", "Orange"]);
+
+const myChangeEvent = (val) => {
+  console.log(val);
+};
+
+const mySelectEvent = ({ id, text }) => {
+  console.log({ id, text });
+};
+</script>
+
+<template>
+  <div>
+    <Select2
+      v-model="myValue"
+      :options="myOptions"
+      :settings="{ dropdownAutoWidth: true, width: 'auto' }"
+      @change="myChangeEvent($event)"
+      @select="mySelectEvent($event)"
+    />
     <h4>Value: {{ myValue }}</h4>
   </div>
 </template>
-<script>
-export default {
-    // declare Select2Component
-    components: {Select2},
-    data() {
-        return {
-            myValue: '',
-            myOptions: ['op1', 'op2', 'op3'] // or [{id: key, text: value}, {id: key, text: value}]
-        }
-    },
-    methods: {
-        myChangeEvent(val){
-            console.log(val);
-        },
-        mySelectEvent({id, text}){
-            console.log({id, text})
-        }
-    }
-}
-</script>
+
+<style scoped></style>
 ```
 
-### Options
-- `options`: `option[]`
-  - select options for select2
-  - `option`: `{id: key, text: value}` or `string`
-- `v-model`: option value that is selected
-  - `id` or `string` while multiple is disable
-  - `id[]` or `string[]` while multiple is enable
-- `update:modelValue`
-  - callback when option selected change
-  - return value
-  - parmas: same with `v-model`
-- `select`
-  - callback when option selected
-  - parmas: `option`(`{id: value, text: key, selected: ifSelected}` or `string`)
-- `disabled`
-  - if select is disabled
-- `placeholder`
-  - placeholder attribute for select element
-- `id`
-  - id attribute for select element
-- `name`
-  - name attribute for select element
-- `settings`
-  - configurable settings, see [Select2 options API](https://select2.org/configuration/options-api)
-  - `setting`: `{ settingOption: value, settingOption: value }`
+main.js
+``` js
+import { createApp } from "vue";
+import "./style.css";
+import App from "./App.vue";
+
+createApp(App).mount("#app");
+```
+
+

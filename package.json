@@ -31,10 +31,7 @@
     "lint": "vue-cli-service lint"
   },
   "homepage": "https://github.com/godbasin/vue-select2#readme",
-  "dependencies": {
-    "jquery": "^3.3.1",
-    "select2": "^4.0.7-rc.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",

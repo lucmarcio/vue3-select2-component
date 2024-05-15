@@ -30,7 +30,7 @@ If you install jQuery and Select2 using npm, it may not work well.
 
 #### 1. Install
 ```
-npm install xignp/vue3-select2-component
+npm install xignp/vue3-select2-component#v1.0.0
 ```
 I'm not publishing this package in npm, So npm will install this package from github.
 
